@@ -36,16 +36,16 @@ _While the PyPi index is public, private packages indexed here are kept private 
 
 ## Try it !
 
-Visit [astariul.github.io/github-hosted-pypi/](http://astariul.github.io/github-hosted-pypi/) and try to install packages indexed there !
+Visit [https://shipcreekgroup.github.io/package-index/](https://shipcreekgroup.github.io/package-index/) and try to install packages indexed there !
 
 ---
 
 Try to install the package `public-hello` :
 ```console
-pip install public-hello --extra-index-url https://astariul.github.io/github-hosted-pypi/
+pip install public-hello --extra-index-url https://shipcreekgroup.github.io/package-index/
 ```
 
-It will also install the package `mydependency`, automatically ! 
+It will also install the package `mydependency`, automatically !
 
 Try it with :
 
@@ -57,14 +57,14 @@ print(hi())
 You can also install a specific version :
 
 ```console
-pip install public-hello==0.1 --extra-index-url https://astariul.github.io/github-hosted-pypi/
+pip install public-hello==0.1 --extra-index-url https://shipcreekgroup.github.io/package-index/
 ```
 
 ---
 
 Now try to install the package `private-hello` :
 ```console
-pip install private-hello --extra-index-url https://astariul.github.io/github-hosted-pypi/
+pip install private-hello --extra-index-url https://shipcreekgroup.github.io/package-index/
 ```
 
 _It will not work, because it's private and only me can access it !_
@@ -83,7 +83,7 @@ _It will not work, because it's private and only me can access it !_
 
 ## Modify indexed packages
 
-Now that your PyPi index is setup, you can register / update / delete packages indexed.  
+Now that your PyPi index is setup, you can register / update / delete packages indexed.
 _Github actions are setup to do it automatically for you._
 
 You just have to :
@@ -100,16 +100,16 @@ You just have to :
 
 As you may know, `pip` can install Github-hosted package if given in the form `pip install git+<repo_link>`. This PyPi index is just an index of links to other Github repository.
 
-Github pages are public, so this PyPi index is public. But it just contain links to other Github repositories, no code is hosted on this PyPi index !.  
+Github pages are public, so this PyPi index is public. But it just contain links to other Github repositories, no code is hosted on this PyPi index !.
 
 If the repository hosting code is private, you will need to authenticate with Github to be able to clone it, effectively making it private.
 
 #### Q. What happen behind the scenes ?
 
-When running `pip install <package_name> --extra-index-url https://astariul.github.io/github-hosted-pypi/`, the following happen :
+When running `pip install <package_name> --extra-index-url https://shipcreekgroup.github.io/package-index/`, the following happen :
 
 1. `pip` will look at `https://pypi.org/`, the default, public index, trying to find a package with the specified name.
-2. If it can't find, it will look at `https://astariul.github.io/github-hosted-pypi/`.
+2. If it can't find, it will look at `https://shipcreekgroup.github.io/package-index/`.
 3. If the package is found there, the link of the package is returned to `pip` (`git+<repo_link>@<tag>`).
 4. From this link, `pip` understand it's a Github repository and will clone the repository (at the specific tag) locally.
 5. From the cloned repository, `pip` install the package.
@@ -119,7 +119,7 @@ _Authentication happen at step 4, when cloning the repository._
 
 #### Q. What are the best practices for using this PyPi index ?
 
-The single best practice is using Github releases. This allow your package to have a version referred by a specific tag.  
+The single best practice is using Github releases. This allow your package to have a version referred by a specific tag.
 To do this :
 
 * Push your code in a repository.
@@ -131,8 +131,8 @@ To do this :
 
 You can just specify a different name for your indexed package. Just give it a different name in the form when registering it.
 
-For example if you have a private package named `tensorflow`, when you register it in this index, you can name it `my_cool_tensorflow`, so there is no name-collision with the public package `tensorflow`.  
-Then you can install it with `pip install my_cool_tensorflow --extra-index-url https://astariul.github.io/github-hosted-pypi/`.
+For example if you have a private package named `tensorflow`, when you register it in this index, you can name it `my_cool_tensorflow`, so there is no name-collision with the public package `tensorflow`.
+Then you can install it with `pip install my_cool_tensorflow --extra-index-url https://shipcreekgroup.github.io/package-index/`.
 
 Then from `python`, you can just do :
 ```python
@@ -143,8 +143,8 @@ _Note : While it's possible to do like this, it's better to have a unique name f
 
 #### Q. How to download private package from Docker ?
 
-Building a Docker image is not interactive, so there is no prompt to type username and password.  
-Instead, you should put your Github credentials in a `.netrc` file, so `pip` can authenticate when cloning from Github.  
+Building a Docker image is not interactive, so there is no prompt to type username and password.
+Instead, you should put your Github credentials in a `.netrc` file, so `pip` can authenticate when cloning from Github.
 To do this securely on Docker, you should use Docker secrets. Here is a quick tutorial on how to do :
 
 **Step 1** : Save your credentials in a secret file. Follow this example :
@@ -155,7 +155,7 @@ machine github.com
 	password <gh_pass>
 ```
 
-⚠️ _Syntax is important : ensure you're using **tabulation**, and the line endings are **`\n`**.  
+⚠️ _Syntax is important : ensure you're using **tabulation**, and the line endings are **`\n`**.
 So careful if you're using a IDE that replace tabs by spaces or if you're on Windows (where line endings are `\r\n`) !_
 
 Let's name this file `gh_auth.txt`.
@@ -166,7 +166,7 @@ Let's name this file `gh_auth.txt`.
 # syntax=docker/dockerfile:experimental
 FROM python:3
 
-RUN --mount=type=secret,id=gh_auth,dst=/root/.netrc pip install <package_name> --extra-index-url https://astariul.github.io/github-hosted-pypi/
+RUN --mount=type=secret,id=gh_auth,dst=/root/.netrc pip install <package_name> --extra-index-url https://shipcreekgroup.github.io/package-index/
 ```
 
 **Step 3** : Build your Docker image, specifying the location of the secret created in step 1 :
@@ -185,7 +185,7 @@ If you come across anything weird / that can be improved, please get in touch !
 
 ## References
 
-**This is greatly inspired from [this repository](https://github.com/ceddlyburge/python-package-server).**  
+**This is greatly inspired from [this repository](https://github.com/ceddlyburge/python-package-server).**
 It's just a glorified version, with cleaner pages and github actions for easily adding, updating and removing packages from your index.
 
 Also check the [blogpost](https://www.freecodecamp.org/news/how-to-use-github-as-a-pypi-server-1c3b0d07db2/) of the original author !
